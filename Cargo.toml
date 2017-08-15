@@ -4,3 +4,5 @@ version = "0.1.0"
 authors = ["Andrew Plaza <aplaza@liquidthink.net>"]
 
 [dependencies]
+xcb = { version = "0.7", features = ["xlib_xcb", "xkb"] }
+xkbcommon = "0.3.0"
