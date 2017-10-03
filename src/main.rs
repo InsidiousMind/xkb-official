@@ -17,12 +17,12 @@
  * You also need xinput for the key press/release event, since the core
  * protocol key press event does not carry a device ID to match on.
  */
-
-extern crate xkbcommon;
 extern crate xcb;
+extern crate xkbcommon;
+
+use xcb::base;
 use xkbcommon::xkb;
-use xcb;
-use xkb::x11::ffi as XKBCONST;
+use xkbcommon::xkb::x11::{MIN_MAJOR_XKB_VERSION, MIN_MINOR_XKB_VERSION};
 use std::cell::{Cell, RefCell};
 
 struct Keyboard {
@@ -39,16 +39,15 @@ impl Keyboard {
 }
 
 fn main() {
-    
-    let (conn, screen_num) = xcb::Connection::connect(None).unwrap();
-    let first_xkb_event: u8 = 0;
-  
-    xkb::x11::setup_xkb_extension(conn, 
-                                  xkb::x11::XKB_X11_MIN_MAJOR_XKB_VERSION,
-                                  xkb::x11::XKB_X11_MIN_MINOR_XKB_VERSION,
-                                  xkb::x11::XKB_X11_SETUP_XKB_EXTENSION_NO_FLAGS,
-                                  0, 0, &first_xkb_event, 0);
-    let device_id = xkb::x11::get_core_keyboard_device_id(&conn);    
+    let mut first_xkb_event: u8 = 0;
+    /// get a new X11 Connection
+    let (conn, screen) = xcb::Connection::connect(None).unwrap();
+    /// This tells the X Server that we want to use XKB
+    /// akin to libxkbcommon 'xkb_x11_setup_xkb_extension'
+    /// returns a cookie which will tell us if xkb version is
+    /// supported or not
+    let cookie = xcb::xkb::use_extension(&conn, 
+                            MIN_MAJOR_XKB_VERSION,
+                            MIN_MINOR_XKB_VERSION);
 
-   
 }

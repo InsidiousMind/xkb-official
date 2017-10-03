@@ -5,4 +5,4 @@ authors = ["Andrew Plaza <aplaza@liquidthink.net>"]
 
 [dependencies]
 xcb = { version = "*", features = ["xlib_xcb", "xkb"] }
-xkbcommon = "*"
+xkbcommon = { version="0.2", features = ["x11"] }
